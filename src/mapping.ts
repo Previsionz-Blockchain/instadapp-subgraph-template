@@ -50,9 +50,9 @@ import {
 import { AccountModule, DSA, Check, InstaIndex, Connector, Chief, Implementation, InstaImplementation, Cast, Spell} from "../generated/schema"
 
 //Import Data Source Templates
-import { InstaAccountV1 } from "../generated/templates"
+//import { InstaAccountV1 } from "../generated/templates"
 import { InstaAccountV2 } from "../generated/templates"
-import { decodeEvents, logAddAuthority, logRemoveAuthority } from "./helpers"
+import { decodeEvents, logAddAuthority, logRemoveAuthority, creatInstaIndex } from "./helpers"
 
 //Index-Area - New DSA
 export function handleLogAccountCreated(event: LogAccountCreated): void{
@@ -73,16 +73,12 @@ export function handleLogAccountCreated(event: LogAccountCreated): void{
   dsa.createdAt = event.block.timestamp;
   dsa.enabledAuthorities = new Array<Bytes>();
   dsa.version = version;
-  if (version.toI32() == 1){
-    InstaAccountV1.create(event.params.account);
-  }else{
-    InstaAccountV2.create(event.params.account);
-  }
+  InstaAccountV2.create(event.params.account);
   dsa.save();
 }
 
 //Index-Area - Settings
-export function handleSetBasics(call: SetBasicsCall): void{
+/*export function handleSetBasics(call: SetBasicsCall): void{
   let id = BigInt.fromI32(1);
   let instaindex = new InstaIndex(id.toHex());
   instaindex.masterAddress = call.inputs._master;
@@ -97,7 +93,7 @@ export function handleSetBasics(call: SetBasicsCall): void{
   account.createdAt = call.block.timestamp;
   account.version = BigInt.fromI32(1);
   account.save();
-}
+}*/
 
 export function handleLogNewAccount(event: LogNewAccount): void {
   let account = new AccountModule(event.params._newAccount.toHex());
@@ -134,6 +130,38 @@ export function handleLogNewCheck(event: LogNewCheck): void {
   }
   check.version = event.params.accountVersion;
   check.address = event.params.check;
+
+  // let id = BigInt.fromI32(1);
+  // let instaindex = InstaIndex.load(id.toHex());
+  // if(!instaindex){
+  //   instaindex = new InstaIndex(id.toHex());
+  //   let contract = index.bind(event.address)
+  //   let callResult1 = contract.try_master();
+  //   if(callResult1.reverted){
+  //     log.warning("Try Master: call reverted", []);
+  //   }
+  //   else{
+  //     instaindex.masterAddress = callResult1.value;
+  //   }
+  //   let callResult2 = contract.try_list();
+  //   if(callResult2.reverted){
+  //     log.warning("Try List: call reverted ", []);
+  //   }
+  //   else{
+  //     instaindex.listAddress = callResult2.value;
+  //   }
+  //   let callResult3 = contract.try_versionCount();
+  //   if(callResult3.reverted){
+  //     log.warning("Try VersionCount: call reverted ", []);
+  //   }
+  //   else{
+  //     instaindex.versionCount = callResult3.value;
+  //   }
+  //}
+  creatInstaIndex(event.address).save();
+  
+
+
   let contract = index.bind(event.address)
   let callResult = contract.try_check(event.params.accountVersion);
   if(callResult.reverted){
@@ -149,18 +177,74 @@ export function handleLogNewCheck(event: LogNewCheck): void {
 }
 
 export function handleLogNewMaster(event: LogNewMaster): void {
-  let id = BigInt.fromI32(1);
-  let instaIndex = InstaIndex.load(id.toHex())!;
-  instaIndex.newMasterAddress = event.params.master;
-  instaIndex.save();
+  // let id = BigInt.fromI32(1);
+  // let instaindex = InstaIndex.load(id.toHex());
+  // if(!instaindex){
+  //   instaindex = new InstaIndex(id.toHex());
+  //   let contract = index.bind(event.address)
+  //   let callResult1 = contract.try_master();
+  //   if(callResult1.reverted){
+  //     log.warning("Try Master: call reverted", []);
+  //   }
+  //   else{
+  //     instaindex.masterAddress = callResult1.value;
+  //   }
+  //   let callResult2 = contract.try_list();
+  //   if(callResult2.reverted){
+  //     log.warning("Try List: call reverted ", []);
+  //   }
+  //   else{
+  //     instaindex.listAddress = callResult2.value;
+  //   }
+  //   let callResult3 = contract.try_versionCount();
+  //   if(callResult3.reverted){
+  //     log.warning("Try VersionCount: call reverted ", []);
+  //   }
+  //   else{
+  //     instaindex.versionCount = callResult3.value;
+  //   }
+  // }
+
+  let instaindex = creatInstaIndex(event.address);
+
+  instaindex.newMasterAddress = event.params.master;
+  instaindex.save();
 }
 
 export function handleLogUpdateMaster(event: LogUpdateMaster): void {
-  let id = BigInt.fromI32(1);
-  let instaIndex = InstaIndex.load(id.toHex())!;
-  instaIndex.masterAddress = event.params.master;
-  instaIndex.newMasterAddress = null;
-  instaIndex.save();
+  // let id = BigInt.fromI32(1);
+  // let instaindex = InstaIndex.load(id.toHex());
+  // if(!instaindex){
+  //   instaindex = new InstaIndex(id.toHex());
+  //   let contract = index.bind(event.address)
+  //   let callResult1 = contract.try_master();
+  //   if(callResult1.reverted){
+  //     log.warning("Try Master: call reverted", []);
+  //   }
+  //   else{
+  //     instaindex.masterAddress = callResult1.value;
+  //   }
+  //   let callResult2 = contract.try_list();
+  //   if(callResult2.reverted){
+  //     log.warning("Try List: call reverted ", []);
+  //   }
+  //   else{
+  //     instaindex.listAddress = callResult2.value;
+  //   }
+  //   let callResult3 = contract.try_versionCount();
+  //   if(callResult3.reverted){
+  //     log.warning("Try VersionCount: call reverted ", []);
+  //   }
+  //   else{
+  //     instaindex.versionCount = callResult3.value;
+  //   }
+  // }
+
+  let instaindex = creatInstaIndex(event.address)
+  //let instaIndex = InstaIndex.load(id.toHex())!;
+  instaindex.masterAddress = event.params.master;
+  instaindex.newMasterAddress = null;
+  instaindex.save();
 }
 
 //InstaAccountV1-Area

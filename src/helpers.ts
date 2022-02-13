@@ -1,6 +1,8 @@
-import { Address, Bytes} from "@graphprotocol/graph-ts";
-import { DSA } from "../generated/schema";
-
+import { Address, Bytes, log, BigInt, ethereum} from "@graphprotocol/graph-ts";
+import { DSA, InstaIndex} from "../generated/schema";
+import {
+    index
+  } from "../generated/index/index"
 
 export function logAddAuthority(dsaAddress: Address, userAddress: Address): DSA{
     let dsa = DSA.load(dsaAddress.toHex())!;
@@ -22,6 +24,37 @@ export function logRemoveAuthority(dsaAddress: Address, userAddress: Address): D
     }
     dsa.enabledAuthorities = newAuthorities;
     return dsa;
+}
+
+export function creatInstaIndex(indexAddress: Address): InstaIndex{
+    let id = BigInt.fromI32(1);
+let instaindex = InstaIndex.load(id.toHex());
+if(!instaindex){
+    instaindex = new InstaIndex(id.toHex());
+    let contract = index.bind(indexAddress)
+    let callResult1 = contract.try_master();
+    if(callResult1.reverted){
+    log.warning("Try Master: call reverted", []);
+    }
+    else{
+    instaindex.masterAddress = callResult1.value;
+    }
+    let callResult2 = contract.try_list();
+    if(callResult2.reverted){
+    log.warning("Try List: call reverted ", []);
+    }
+    else{
+    instaindex.listAddress = callResult2.value;
+    }
+    let callResult3 = contract.try_versionCount();
+    if(callResult3.reverted){
+    log.warning("Try VersionCount: call reverted ", []);
+    }
+    else{
+    instaindex.versionCount = callResult3.value;
+    }
+}
+    return instaindex;
 }
 
 export function decodeEvents(eventHead: string, eventBody: Bytes): Bytes[]{

@@ -1,0 +1,7 @@
+{
+  "network": "matic",
+  "startBlock": "12795242",
+  "index_address": "0xA9B99766E6C676Cf1975c0D3166F96C0848fF5ad",
+  "connector_address": "0x2A00684bFAb9717C21271E0751BCcb7d2D763c88",
+  "implementation_address": "0x39d3d5e7c11D61E072511485878dd84711c19d4A"
+}

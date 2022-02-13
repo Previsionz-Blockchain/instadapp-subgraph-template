@@ -6,20 +6,6 @@ import {
   DataSourceContext
 } from "@graphprotocol/graph-ts";
 
-export class InstaAccountV1 extends DataSourceTemplate {
-  static create(address: Address): void {
-    DataSourceTemplate.create("InstaAccountV1", [address.toHex()]);
-  }
-
-  static createWithContext(address: Address, context: DataSourceContext): void {
-    DataSourceTemplate.createWithContext(
-      "InstaAccountV1",
-      [address.toHex()],
-      context
-    );
-  }
-}
-
 export class InstaAccountV2 extends DataSourceTemplate {
   static create(address: Address): void {
     DataSourceTemplate.create("InstaAccountV2", [address.toHex()]);

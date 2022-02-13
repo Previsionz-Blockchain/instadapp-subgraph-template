@@ -1,17 +1,23 @@
 {
-  "name": "Instadapp-Ethereum",
+  "name": "instadapp-subgraph",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ Previsionz-Block-Data/Instadapp-Ethereum",
-    "deploy-hosted": "graph deploy --product hosted-service Previsionz-Block-Data/Instadapp-Ethereum",
+    "prepare-matic": "mustache config/matic.json subgraph.template.yaml > subgraph.yaml",
+    "prepare-arbitrum": "mustache config/arbitrum.json subgraph.template.yaml > subgraph.yaml",
+    "prepare-avalanche": "mustache config/avalanche.json subgraph.template.yaml > subgraph.yaml",
+    "deploy-hosted-matic": "graph deploy --product hosted-service Previsionz-Block-Data/Instadapp-DSA-Polygon",
+    "deploy-hosted-avalanche": "graph deploy --product hosted-service Previsionz-Block-Data/Instadapp-dsa-avalanche",
+    "deploy-hosted-arbitrum": "graph deploy --product hosted-service Previsionz-Block-Data/Instadapp-DSA-Arbitrum",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ Previsionz-Block-Data/Instadapp-DSA-Polygon",
     "create-local": "graph create --node http://localhost:8020/ Previsionz-Block-Data/Instadapp-Ethereum",
     "remove-local": "graph remove --node http://localhost:8020/ Previsionz-Block-Data/Instadapp-Ethereum",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Previsionz-Block-Data/Instadapp-Ethereum"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.22.0",
-    "@graphprotocol/graph-ts": "^0.22.0"
+    "@graphprotocol/graph-ts": "^0.22.0",
+    "mustache": "^3.1.0"
   }
 }

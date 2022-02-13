@@ -1,14 +1,15 @@
 specVersion: 0.0.2
+description: Polygon Version
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: index
-    network: mainnet
+    network: {{network}}
     source:
-      address: "0x2971adfa57b20e5a416ae5a708a8655a9c74f723"
+      address: '{{index_address}}'
       abi: index
-      startBlock: 9747000
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -34,17 +35,17 @@ dataSources:
           handler: handleLogNewMaster
         - event: LogUpdateMaster(indexed address)
           handler: handleLogUpdateMaster
-      callHandlers:
-        - function: setBasics(address,address,address,address)
-          handler: handleSetBasics
+      # callHandlers:
+      #   - function: setBasics(address,address,address,address)
+      #     handler: handleSetBasics
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: ConnectorsV2
-    network: mainnet
+    network: {{network}}
     source:
-      address: "0x97b0B3A8bDeFE8cB9563a3c610019Ad10DB8aD11"
+      address: '{{connector_address}}'
       abi: ConnectorsV2
-      startBlock: 12061000
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -67,11 +68,11 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: InstaImplementations
-    network: mainnet
+    network: {{network}}
     source:
-      address: "0xCBA828153d3a85b30B5b912e1f2daCac5816aE9D"
+      address: '{{implementation_address}}'
       abi: InstaImplementations
-      startBlock: 12061000
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -92,39 +93,10 @@ dataSources:
       file: ./src/mapping.ts
   
 templates:
-  - kind: ethereum/contract
-    name: InstaAccountV1
-    network: mainnet
-    source:
-      abi: InstaAccountV1
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - DSA
-        - Cast
-        - hourlyCastedDSA
-      abis:
-        - name: InstaAccountV1
-          file: ./abis/InstaAccountV1.json
-      eventHandlers:
-        - event: LogEnable(indexed address)
-          handler: handleLogEnable
-        - event: LogDisable(indexed address)
-          handler: handleLogDisable
-        - event: LogSwitchShield(bool)
-          handler: handleLogSwitchShield
-        - event: LogCast(indexed address,indexed address,uint256)
-          handler: handleLogCast
-      callHandlers:
-        - function: cast(address[],bytes[],address)
-          handler: handleCast
-      file: ./src/mapping.ts
 
   - kind: ethereum/contract
     name: InstaAccountV2
-    network: mainnet
+    network: {{network}}
     source:
       abi: InstaAccountV2
     mapping:

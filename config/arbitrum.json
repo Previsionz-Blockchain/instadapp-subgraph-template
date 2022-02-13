@@ -1,0 +1,7 @@
+{
+    "network": "arbitrum-one",
+    "startBlock": "337405",
+    "index_address": "0x1eE00C305C51Ff3bE60162456A9B533C07cD9288",
+    "connector_address": "0x67fCE99Dd6d8d659eea2a1ac1b8881c57eb6592B",
+    "implementation_address": "0xF3Bb2FbdCDa1B8B6d19f513D69462eA548d0eF12"
+  }
